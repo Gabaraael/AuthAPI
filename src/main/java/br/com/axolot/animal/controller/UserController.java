@@ -5,6 +5,7 @@ import br.com.axolot.animal.dtos.UserLogin;
 import br.com.axolot.animal.dtos.UserPasswordChange;
 import br.com.axolot.animal.dtos.UserRegister;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(path = "/user")
+@CrossOrigin(origins = "*")
 public class UserController {
     private final UserService userService;
 
