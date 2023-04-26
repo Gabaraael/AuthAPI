@@ -1,14 +1,25 @@
 package br.com.axolot.animal;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
-import org.springframework.context.annotation.Bean;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
 @SpringBootApplication
-public class SecSecurityConfig extends SpringBootServletInitializer{
-
-
+public class SecSecurityConfig extends WebSecurityConfigurerAdapter {
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.cors()
+                .and()
+                .authorizeRequests()
+                .antMatchers(HttpMethod.GET, "/user/info", "/api/foos/**")
+                .hasAuthority("SCOPE_read")
+                .antMatchers(HttpMethod.POST, "/api/foos")
+                .hasAuthority("SCOPE_write")
+                .anyRequest()
+                .authenticated()
+                .and()
+                .oauth2ResourceServer()
+                .jwt();
+    }
 }
