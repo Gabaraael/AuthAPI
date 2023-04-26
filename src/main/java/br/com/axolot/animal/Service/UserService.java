@@ -29,12 +29,19 @@ public class UserService {
     @Transactional
     public void register(@NotNull UserRegister userRegister) {
 
-        if (checkUsernameExist(userRegister.getUsername()))
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "This username is already in use");
+        validateUserRegister(userRegister);
 
         String passwordEncoded = passwordEncoder.encode(userRegister.getPassword());
         userRegister.setPassword(passwordEncoded);
         userRepository.save(buildUser(userRegister));
+    }
+
+    public void validateUserRegister(UserRegister user) {
+        if (checkUsernameExist(user.getUsername()))
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "This username is already in use");
+
+        if (checkEmailExist(user.getEmail()))
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "This Email is already in use");
     }
 
     @Transactional
@@ -70,9 +77,13 @@ public class UserService {
         return passwordEncoder.encode(password);
     }
 
-    public Boolean checkUsernameExist(String username) {
+    private Boolean checkUsernameExist(String username) {
         return userRepository.findByUsername(username).isPresent();
     }
+    private Boolean checkEmailExist(String username) {
+        return userRepository.findByEmail(username).isPresent();
+    }
+
 
     public UserEntity findByUsername(String username) {
         Optional<UserEntity> user = userRepository.findByUsername(username);
