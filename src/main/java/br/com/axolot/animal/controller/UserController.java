@@ -34,7 +34,6 @@ UserController {
         return ResponseEntity.ok().body(userService.login(userLogin));
     }
 
-    //Deve ser um PUT
     @PutMapping(path = "/change-password")
     public ResponseEntity changePassword(@RequestBody UserPasswordChange userPasswordChange) {
         userService.changePassword(userPasswordChange);
